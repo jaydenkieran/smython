@@ -34,6 +34,14 @@ class SmiteClient(object):
         url = self._build_request_url(methodname, parameters)
         html = urlopen(url).read()
         return json.loads(html.decode('utf-8'))
+    
+    def _ping(self):
+        """
+        :return: Indicates whether the request was successful
+        """
+        url = '{0}/ping'.format(SmiteClient._BASE_URL)
+        html = urlopen(url).read()
+        return json.loads(html.decode('utf.8'))
 
     def _build_request_url(self, methodname, parameters=()):
         signature = self._create_signature(methodname)
