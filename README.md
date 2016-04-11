@@ -8,7 +8,7 @@ Simple wrapper around Smite's API, allowing basic functionality and the ability 
 
 ## Installation
 
-Place `python.py` into the project you would like to use it in.
+Place `smite.py` into the project you would like to use it in.
 
 ## Credits
 
