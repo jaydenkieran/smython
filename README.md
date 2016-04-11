@@ -4,11 +4,18 @@ Simple wrapper around Smite's API, allowing basic functionality and the ability 
 
 ## Prerequisites
 
-+ Python 3+
++ Python 3.5
 
-## Installation
+## How to use
 
-Place `smite.py` into the project you would like to use it in.
+If you do not already have a developer ID and API key, you can obtain one by filling out [this form](https://fs12.formsite.com/HiRez/form48/secure_index.html)
+
+1. Place `smite.py` into the project path you would like to use it in.
+2. Import the `SmiteClient` class, e.g `from test.smite import SmiteClient`
+3. Initialize the class, e.g `smite = SmiteClient(devID, apiKey)`
+4. Call the method you want to use, e.g `data = client.get_player("JaydenKieran")`
+
+After obtaining the data, you can do what you want with it, such as print specific keys to the console.
 
 ## Credits
 
