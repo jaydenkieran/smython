@@ -76,6 +76,13 @@ class SmiteClient(object):
         """
         return self._make_request('getdataused')
 
+    def get_demo_details(self, match_id):
+        """
+        :param match_id: ID of the match
+        :return: Returns information regarding a match (better to use get_match_details)
+        """
+        return self._make_request('getdemodetails', [match_id])
+
     def get_gods(self):
         """
         :return: Returns all smite Gods and their various attributes
@@ -114,6 +121,31 @@ class SmiteClient(object):
         """
         return self._make_request('getmatchdetails', [match_id])
 
+    def get_match_ids_by_queue(self, queue, date, hour=-1):
+        """
+        :param queue: The queue to obtain data from
+        :param date: The date to obtain data from
+        :param hour: The hour to obtain data from (0-23, -1 = all day)
+        :return: Returns a list of all match IDs for a specific match queue for given time frame
+        """
+        return self._make_request('getmatchidsbyqueue', [queue, date, hour])
+
+    def get_league_leaderboard(self, queue, tier, season):
+        """
+        :param queue: The queue to obtain data from
+        :param tier: The tier to obtain data from
+        :param season: The season to obtain data from
+        :return: Returns the top players for a particular league
+        """
+        return self._make_request('getleagueleaderboard', [queue, tier, season])
+
+    def get_league_seasons(self, queue):
+        """
+        :param queue: The queue to obtain data from
+        :return: Returns a list of seasons for a match queue
+        """
+        return self._make_request('getleagueseasons', [queue])
+
     def get_team_details(self, clan_id):
         """
         :param clan_id: The id of the clan
@@ -125,6 +157,8 @@ class SmiteClient(object):
         """
         :param clan_id: The ID of the clan.
         :return: Returns a history of matches from the given clan.
+
+        NOTE: Be aware that this method is deprecated and will return a null dataset
         """
         return self._make_request('getteammatchhistory', [clan_id])
 
@@ -148,6 +182,13 @@ class SmiteClient(object):
         :return: Returns league and non-league high level data for a given player name
         """
         return self._make_request('getplayer', [player_name])
+
+    def get_player_achievements(self, player_id):
+        """
+        :param player_id: ID of a player
+        :return: Returns a select number of achievement totals for the specified player ID
+        """
+        return self._make_request('getplayerachievements', [player_id])
 
     def get_player_status(self, player_name):
         """
@@ -176,6 +217,13 @@ class SmiteClient(object):
         :return: Returns the recent matches and high level match statistics for a particular player.
         """
         return self._make_request('getmatchhistory', [str(player)])
+
+    def get_match_player_details(self, match_id):
+        """
+        :param match_id: The ID of the match
+        :return: Returns player information for a live match
+        """
+        return self._make_request('getmatchplayerdetails', [match_id])
 
     def get_motd(self):
         """
