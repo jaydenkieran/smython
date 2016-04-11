@@ -12,5 +12,5 @@ Place `smite.py` into the project you would like to use it in.
 
 ## Credits
 
-+ Jayden Bailey - *Developer*
++ Jayden Bailey - **Developer**
 + Originally forked from [RichardJTorres/smython](https://github.com/RichardJTorres/smython)
