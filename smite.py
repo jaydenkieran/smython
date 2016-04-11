@@ -1,5 +1,6 @@
 """
-    A python tool to make client API requests to the Smite API
+    smite-python (github.com/jaydenkieran/smite-python)
+    Distributed under the MIT License by Jayden Bailey
 """
 import hashlib
 from urllib.request import urlopen
@@ -27,17 +28,14 @@ class SmiteClient(object):
 
     def _make_request(self, methodname, parameters=None):
         if not self._session or not self._test_session(self._session):
-            print("No _session, creating a session")
+            print("Creating new SmiteAPI session")
             self._session = self._create_session()
 
-        print("Session: " + str(self._session))
         url = self._build_request_url(methodname, parameters)
-        print(url)
         html = urlopen(url).read()
         return json.loads(html.decode('utf-8'))
 
     def _build_request_url(self, methodname, parameters=()):
-        print(parameters)
         signature = self._create_signature(methodname)
         timestamp = self._create_now_timestamp()
         session_id = self._session.get("session_id")
@@ -51,7 +49,6 @@ class SmiteClient(object):
     def _create_session(self):
         signature = self._create_signature('createsession')
         url = '{0}/createsessionJson/{1}/{2}/{3}'.format(SmiteClient._BASE_URL, self.dev_id, signature, self._create_now_timestamp())
-        print(url)
         html = urlopen(url).read()
         return json.loads(html.decode('utf-8'))
 
@@ -70,7 +67,6 @@ class SmiteClient(object):
         path = "/".join(
             [methodname + self._RESPONSE_FORMAT, self.dev_id, signature, session.get("session_id"), timestamp])
         url = self._BASE_URL + path
-        print(url)
         html = urlopen(url).read()
         return "successful" in json.loads(html.decode('utf-8'))
 
@@ -153,6 +149,13 @@ class SmiteClient(object):
         """
         return self._make_request('getplayer', [player_name])
 
+    def get_player_status(self, player_name):
+        """
+        :param player_name: the string name of a player
+        :return: Returns the current online status of a player
+        """
+        return self._make_request('getplayerstatus', [player_name])
+
     def get_friends(self, player):
         """
         :param player: The player name or a player ID
@@ -173,6 +176,12 @@ class SmiteClient(object):
         :return: Returns the recent matches and high level match statistics for a particular player.
         """
         return self._make_request('getmatchhistory', [str(player)])
+
+    def get_motd(self):
+        """
+        :return: Returns information about the most recent Match of the Days
+        """
+        return self._make_request('getmotd')
 
     def get_queue_stats(self, player, queue):
         """
