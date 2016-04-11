@@ -1,11 +1,16 @@
-Smython
-=======
+# smite-python
 
-Python Library for accessing the Smite API
+Simple wrapper around Smite's API, allowing basic functionality and the ability to make various calls.
 
-##Things to come
-Better README,
-Unit Tests
+## Prerequisites
 
++ Python 3+
 
+## Installation
 
+Place `python.py` into the project you would like to use it in.
+
+## Credits
+
++ Jayden Bailey - *Developer*
++ Originally forked from [RichardJTorres/smython](https://github.com/RichardJTorres/smython)
