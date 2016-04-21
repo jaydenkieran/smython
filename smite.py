@@ -86,7 +86,7 @@ class SmiteClient(object):
         """
         url = '{0}/pingJson'.format(SmiteClient._BASE_URL)
         html = urlopen(url).read()
-        return json.loads(html.decode('utf.8'))
+        return json.loads(html.decode('utf-8'))
 
     def get_data_used(self):
         """
