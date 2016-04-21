@@ -84,7 +84,7 @@ class SmiteClient(object):
         """
         :return: Indicates whether the request was successful
         """
-        url = '{0}/ping'.format(SmiteClient._BASE_URL)
+        url = '{0}/pingJson'.format(SmiteClient._BASE_URL)
         html = urlopen(url).read()
         return json.loads(html.decode('utf.8'))
 
