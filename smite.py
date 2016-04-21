@@ -16,7 +16,7 @@ class Endpoint(Enum):
     XBOX = "http://api.xbox.smitegame.com/smiteapi.svc/"
 
 class SmiteClient(object):
-    _BASE_URL = Endpoint.PC
+    _BASE_URL = Endpoint.PC.value
     _RESPONSE_FORMAT = 'Json'
 
     def __init__(self, dev_id, auth_key, lang=1):
