@@ -1,6 +1,6 @@
 # smite-python
 
-Simple wrapper around Smite's API, allowing basic functionality and the ability to make various calls.
+Simple wrapper around Smite's API, allowing basic functionality and the ability to make various calls. All method calls will return as a `JSON` string which can then be iterated over.
 
 ## Prerequisites
 
@@ -21,6 +21,15 @@ from smite import Endpoint
 - Initialise the `SmiteClient` class
 ```python
 smite = SmiteClient(devId, authKey)
+```
+
+### Switching endpoints
+To switch endpoints, simply call `_switch_endpoint` with a valid `Endpoint` enum
+
+```python
+smite._switch_endpoint(Endpoint.PC) # Switch endpoint to PC
+smite._switch_endpoint(Endpoint.PS4) # Switch endpoint to PS4
+smite._switch_endpoint(Endpoint.XBOX) # Switch endpoint to Xbox
 ```
 
 ### Examples
