@@ -3,15 +3,20 @@
     Distributed under the MIT License by Jayden Bailey
 """
 import hashlib
+from enum import Enum
 from urllib.request import urlopen
 
 import json
 
 from datetime import datetime
 
+class Endpoint(Enum):
+    PC = "http://api.smitegame.com/smiteapi.svc/"
+    PS4 = "http://api.ps4.smitegame.com/smiteapi.svc/"
+    XBOX = "http://api.xbox.smitegame.com/smiteapi.svc/"
 
 class SmiteClient(object):
-    _BASE_URL = 'http://api.smitegame.com/smiteapi.svc/'
+    _BASE_URL = Endpoint.PC
     _RESPONSE_FORMAT = 'Json'
 
     def __init__(self, dev_id, auth_key, lang=1):
@@ -34,14 +39,6 @@ class SmiteClient(object):
         url = self._build_request_url(methodname, parameters)
         html = urlopen(url).read()
         return json.loads(html.decode('utf-8'))
-    
-    def _ping(self):
-        """
-        :return: Indicates whether the request was successful
-        """
-        url = '{0}/ping'.format(SmiteClient._BASE_URL)
-        html = urlopen(url).read()
-        return json.loads(html.decode('utf.8'))
 
     def _build_request_url(self, methodname, parameters=()):
         signature = self._create_signature(methodname)
@@ -77,6 +74,19 @@ class SmiteClient(object):
         url = self._BASE_URL + path
         html = urlopen(url).read()
         return "successful" in json.loads(html.decode('utf-8'))
+
+    def _switch_endpoint(self, endpoint):
+        if not isinstance(endpoint, Endpoint):
+            raise TypeError("Switch endpoint method requires Endpoint type argument")
+        self._BASE_URL = endpoint.value
+
+    def ping(self):
+        """
+        :return: Indicates whether the request was successful
+        """
+        url = '{0}/ping'.format(SmiteClient._BASE_URL)
+        html = urlopen(url).read()
+        return json.loads(html.decode('utf.8'))
 
     def get_data_used(self):
         """
