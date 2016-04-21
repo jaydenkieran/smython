@@ -3,12 +3,17 @@
     Distributed under the MIT License by Jayden Bailey
 """
 import hashlib
+import traceback
+import urllib
 from enum import Enum
 from urllib.request import urlopen
 
 import json
 
 from datetime import datetime
+
+class SmiteError(Exception):
+    pass
 
 class Endpoint(Enum):
     PC = "http://api.smitegame.com/smiteapi.svc/"
@@ -38,7 +43,10 @@ class SmiteClient(object):
 
         url = self._build_request_url(methodname, parameters)
         html = urlopen(url).read()
-        return json.loads(html.decode('utf-8'))
+        jsonfinal = json.loads(html.decode('utf-8'))
+        if not jsonfinal:
+            raise SmiteError("The result was a null dataset")
+        return jsonfinal
 
     def _build_request_url(self, methodname, parameters=()):
         signature = self._create_signature(methodname)
@@ -77,7 +85,7 @@ class SmiteClient(object):
 
     def _switch_endpoint(self, endpoint):
         if not isinstance(endpoint, Endpoint):
-            raise TypeError("Switch endpoint method requires Endpoint type argument")
+            raise SmiteError("Switch endpoint method requires Endpoint type argument")
         self._BASE_URL = endpoint.value
 
     def ping(self):
