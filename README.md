@@ -24,7 +24,7 @@ smite = SmiteClient(devId, authKey)
 ```
 
 ### Switching endpoints
-To switch endpoints, simply call `_switch_endpoint` with a valid `Endpoint` enum
+To switch endpoints, simply call `_switch_endpoint(Endpoint)` with a valid `Endpoint` enum
 
 ```python
 smite._switch_endpoint(Endpoint.PC) # Switch endpoint to PC
@@ -44,6 +44,24 @@ player = smite.get_player("JaydenKieran")
 for i in player:
     print(i['Account_Level'])
 ```
+
+## FAQ
++ I get a `urllib.error.HTTPError` exception when calling a method
+
+If there is a problem with a given argument, such as a match ID or player, this exception will tend to occur. It can be for many reasons, such as an invalid match ID, or the fact that a player has "Hide My Profile" enabled in-game.
+
++ A method returns an empty dataset
+
+If there is no information available, the API will return an empty dataset. A smart way to catch this is usually by doing something similar to this:
+```python
+player = smite.get_player("JaydenKieran")
+if not data:
+    raise ReferenceError("Data is empty")
+```
+
++ When using methods such as `get_match(id)`, some player names/information is missing. Why?
+
+If a player has privacy mode enabled in-game, most of their data will be unavailable. There are slight exceptions to this, such as obtaining the name of the god that was played by that person.
 
 ## Credits
 
