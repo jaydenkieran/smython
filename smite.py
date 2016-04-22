@@ -3,8 +3,6 @@
     Distributed under the MIT License by Jayden Bailey
 """
 import hashlib
-import traceback
-import urllib
 from enum import Enum
 from urllib.request import urlopen
 
@@ -35,7 +33,6 @@ class SmiteClient(object):
         self.lang = lang
         self._session = None
 
-
     def _make_request(self, methodname, parameters=None):
         if not self._session or not self._test_session(self._session):
             print("Creating new SmiteAPI session")
@@ -52,7 +49,6 @@ class SmiteClient(object):
         signature = self._create_signature(methodname)
         timestamp = self._create_now_timestamp()
         session_id = self._session.get("session_id")
-
 
         path = [methodname + SmiteClient._RESPONSE_FORMAT, self.dev_id, signature, session_id, timestamp]
         if parameters:
