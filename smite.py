@@ -3,6 +3,7 @@
     Distributed under the MIT License by Jayden Bailey
 """
 import hashlib
+import urllib
 from enum import Enum
 from urllib.request import urlopen
 
@@ -11,12 +12,28 @@ import logging
 
 from datetime import datetime
 
+version = '1.0_rc2'
+
 # Initialise logging
-logging.basicConfig(format='%(asctime)s [%(levelname)s]: %(message)s', filename='recent.log', level=logging.DEBUG, datefmt='%d/%m/%Y %I:%M:%S %p')
+logger = logging.getLogger('smitepython')
+logger.setLevel(logging.DEBUG)
+fh = logging.FileHandler('recent.log', encoding='utf-8')
+fh.setLevel(logging.DEBUG)
+formatter = logging.Formatter(fmt='%(asctime)s [%(levelname)s]: %(message)s', datefmt='%d/%m/%Y %I:%M:%S %p')
+fh.setFormatter(formatter)
+logger.addHandler(fh)
+logger.info('Loaded smite-python {}, github.com/jaydenkieran/smite-python'.format(version))
 
 
 class SmiteError(Exception):
-    pass
+    def __init__(self, *args, **kwargs):
+        Exception.__init__(self, *args, **kwargs)
+        logger.error('SmiteError: {}'.format(args))
+
+
+class NoResultError(SmiteError):
+    def __init__(self, *args, **kwargs):
+        SmiteError.__init__(self, *args, **kwargs)
 
 
 class Endpoint(Enum):
@@ -34,26 +51,28 @@ class SmiteClient(object):
         :param auth_key: Your authorization key
         :param lang: the language code needed by some queries, default to english.
         """
-        logging.debug('Initialising SmiteClient class')
         self.dev_id = str(dev_id)
         self.auth_key = str(auth_key)
         self.lang = lang
         self._session = None
         self._BASE_URL = Endpoint.PC.value
-        logging.debug('dev_id: {}, auth_key: {}, lang: {}'.format(self.dev_id, self.auth_key, self.lang))
+        logger.debug('dev_id: {}, auth_key: {}, lang: {}'.format(self.dev_id, self.auth_key, self.lang))
 
     def _make_request(self, methodname, parameters=None):
         if not self._session or not self._test_session(self._session):
-            logging.info('Creating new session with the SmiteAPI')
+            logger.info('Creating new session with the SmiteAPI')
             self._session = self._create_session()
 
         url = self._build_request_url(methodname, parameters)
-        logging.debug('Built request URL for {}: {}'.format(methodname, url))
-        html = urlopen(url).read()
+        logger.debug('Built request URL for {}: {}'.format(methodname, url))
+        try:
+            html = urlopen(url).read()
+        except urllib.error.HTTPError as e:
+            if e.code == 404:
+                raise NoResultError("Request invalid. API auth details may be incorrect.") from None
         jsonfinal = json.loads(html.decode('utf-8'))
         if not jsonfinal:
-            logging.warning('Request result was a null dataset: []')
-            raise SmiteError("The result was a null dataset")
+            raise NoResultError("Request was successful, but returned no data.") from None
         return jsonfinal
 
     def _build_request_url(self, methodname, parameters=()):
@@ -69,7 +88,11 @@ class SmiteClient(object):
     def _create_session(self):
         signature = self._create_signature('createsession')
         url = '{0}/createsessionJson/{1}/{2}/{3}'.format(self._BASE_URL, self.dev_id, signature, self._create_now_timestamp())
-        html = urlopen(url).read()
+        try:
+            html = urlopen(url).read()
+        except urllib.error.HTTPError as e:
+            if e.code == 404:
+                raise NoResultError("Couldn't create session. API auth details may be incorrect.") from None
         return json.loads(html.decode('utf-8'))
 
     def _create_now_timestamp(self):
@@ -87,15 +110,19 @@ class SmiteClient(object):
         path = "/".join(
             [methodname + self._RESPONSE_FORMAT, self.dev_id, signature, session.get("session_id"), timestamp])
         url = self._BASE_URL + path
-        logging.debug('Testing session using: {}'.format(url))
-        html = urlopen(url).read()
+        logger.debug('Testing session using: {}'.format(url))
+        try:
+            html = urlopen(url).read()
+        except urllib.error.HTTPError as e:
+            if e.code == 404:
+                raise NoResultError("Couldn't test session. API auth details may be incorrect.") from None
         return "successful" in json.loads(html.decode('utf-8'))
 
     def _switch_endpoint(self, endpoint):
         if not isinstance(endpoint, Endpoint):
             raise SmiteError("Switch endpoint method requires Endpoint type argument")
         self._BASE_URL = endpoint.value
-        logging.debug('Endpoint switch. New call URL: {}'.format(self._BASE_URL))
+        logger.debug('Endpoint switch. New call URL: {}'.format(self._BASE_URL))
         return
 
     def ping(self):
