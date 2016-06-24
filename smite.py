@@ -74,6 +74,8 @@ class SmiteClient(object):
                 raise NoResultError("Request invalid. API auth details may be incorrect.") from None
             if e.code == 400:
                 raise NoResultError("Request invalid. Bad request.") from None
+            else:
+                traceback.print_exc()
         jsonfinal = json.loads(html.decode('utf-8'))
         if not jsonfinal:
             raise NoResultError("Request was successful, but returned no data.") from None
@@ -97,6 +99,8 @@ class SmiteClient(object):
         except urllib.error.HTTPError as e:
             if e.code == 404:
                 raise NoResultError("Couldn't create session. API auth details may be incorrect.") from None
+            else:
+                traceback.print_exc()
         return json.loads(html.decode('utf-8'))
 
     def _create_now_timestamp(self):
@@ -120,11 +124,13 @@ class SmiteClient(object):
         except urllib.error.HTTPError as e:
             if e.code == 404:
                 raise NoResultError("Couldn't test session. API auth details may be incorrect.") from None
+            else:
+                traceback.print_exc()
         return "successful" in json.loads(html.decode('utf-8'))
 
     def _switch_endpoint(self, endpoint):
         if not isinstance(endpoint, Endpoint):
-            raise SmiteError("Switch endpoint method requires Endpoint type argument")
+            raise SmiteError("You need to use an enum to switch endpoints")
         self._BASE_URL = endpoint.value
         logger.debug('Endpoint switch. New call URL: {}'.format(self._BASE_URL))
         return
