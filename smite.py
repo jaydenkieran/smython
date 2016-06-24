@@ -3,6 +3,7 @@
     Distributed under the MIT License by Jayden Bailey
 """
 import hashlib
+import traceback
 import urllib
 from enum import Enum
 from urllib.request import urlopen
@@ -64,12 +65,15 @@ class SmiteClient(object):
             self._session = self._create_session()
 
         url = self._build_request_url(methodname, parameters)
+        url = url.replace(' ', '%20')  # Cater for spaces in parameters
         logger.debug('Built request URL for {}: {}'.format(methodname, url))
         try:
             html = urlopen(url).read()
         except urllib.error.HTTPError as e:
             if e.code == 404:
                 raise NoResultError("Request invalid. API auth details may be incorrect.") from None
+            if e.code == 400:
+                raise NoResultError("Request invalid. Bad request.") from None
         jsonfinal = json.loads(html.decode('utf-8'))
         if not jsonfinal:
             raise NoResultError("Request was successful, but returned no data.") from None
