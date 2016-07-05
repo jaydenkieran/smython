@@ -1,0 +1,1 @@
+Search.setIndex({envversion:50,filenames:["index"],objects:{},objnames:{},objtypes:{},terms:{access:0,api:0,around:0,content:0,have:0,index:0,modul:0,must:0,page:0,rez:0,search:0,simpl:0,studio:0,wrapper:0,you:0},titles:["Welcome to smite-python&#8217;s documentation!"],titleterms:{document:0,indice:0,python:0,smite:0,tabl:0,welcom:0}})
