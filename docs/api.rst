@@ -21,4 +21,3 @@ Enums
 -------
 
 .. autoclass:: Endpoint
-    :members:

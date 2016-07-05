@@ -38,12 +38,24 @@ class NoResultError(SmiteError):
 
 
 class Endpoint(Enum):
+    """
+    Valid enums: PC, PS4, XBOX
+    """
     PC = "http://api.smitegame.com/smiteapi.svc/"
     PS4 = "http://api.ps4.smitegame.com/smiteapi.svc/"
     XBOX = "http://api.xbox.smitegame.com/smiteapi.svc/"
 
 
 class SmiteClient(object):
+    """
+    Represents a connection to the Smite API.
+    This class is used to interact with the API and retrieve information in JSON.
+
+    Note
+    -----
+    Any player with Privacy Mode enabled in-game will return
+    a null dataset from methods that require a player name
+    """
     _RESPONSE_FORMAT = 'Json'
 
     def __init__(self, dev_id, auth_key, lang=1):
@@ -138,6 +150,11 @@ class SmiteClient(object):
     def ping(self):
         """
         :return: Indicates whether the request was successful
+
+        Note
+        -----
+        Pinging the Smite API is used to establish connectivity.
+        You do not need to authenticate your ID or key to do this.
         """
         url = '{0}/pingJson'.format(self._BASE_URL)
         html = urlopen(url).read()
@@ -145,14 +162,23 @@ class SmiteClient(object):
 
     def get_data_used(self):
         """
-        :return : Returns a dictionary of daily usage limits and the stats against those limits
+        :return: Returns a dictionary of daily usage limits and the stats against those limits
+
+        Note
+        -----
+        Getting your data usage does contribute to your
+        daily API limits
         """
         return self._make_request('getdataused')
 
     def get_demo_details(self, match_id):
         """
         :param match_id: ID of the match
-        :return: Returns information regarding a match (better to use get_match_details)
+        :return: Returns information regarding a match
+
+        Note
+        -----
+        It is better practice to use :meth:`get_match_details`
         """
         return self._make_request('getdemodetails', [match_id])
 
@@ -231,7 +257,9 @@ class SmiteClient(object):
         :param clan_id: The ID of the clan.
         :return: Returns a history of matches from the given clan.
 
-        NOTE: Be aware that this method is deprecated and will return a null dataset
+        Warning
+        -----
+        This method is deprecated and will return a null dataset
         """
         return self._make_request('getteammatchhistory', [clan_id])
 

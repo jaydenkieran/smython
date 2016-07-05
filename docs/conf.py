@@ -21,6 +21,8 @@ import os
 import sys
 sys.path.insert(0, os.path.abspath('..'))
 
+on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
+
 # -- General configuration ------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
@@ -31,6 +33,11 @@ sys.path.insert(0, os.path.abspath('..'))
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = ['sphinx.ext.autodoc']
+
+if on_rtd:
+  extensions.append('sphinxcontrib.napoleon')
+else:
+  extensions.append('sphinx.ext.napoleon')
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -121,7 +128,6 @@ todo_include_todos = False
 # a list of builtin themes.
 #
 # on_rtd is whether we are on readthedocs.org, this line of code grabbed from docs.readthedocs.org
-on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
 
 if not on_rtd:  # only import and set the theme if we're building docs locally
     import sphinx_rtd_theme
