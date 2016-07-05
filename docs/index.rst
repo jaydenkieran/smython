@@ -6,12 +6,12 @@
 Welcome to smite-python's documentation!
 ========================================
 
-smite-python is a simple Python wrapper around Hi-Rez Studios' Smite API. To use it, you must have access to the API.
-
 Contents:
 
 .. toctree::
    :maxdepth: 2
+
+   api
 
 
 
@@ -20,5 +20,4 @@ Indices and tables
 
 * :ref:`genindex`
 * :ref:`modindex`
-* :ref:`search`
 
