@@ -187,6 +187,13 @@ class SmiteClient(object):
         :return: Returns all smite Gods and their various attributes
         """
         return self._make_request('getgods', [self.lang])
+    
+    def get_god_skins(self, god_id):
+        """
+        :param: god_id: ID of god you are querying. Can be found in get_gods return result.
+        :return: Returnss all skin information for a particular god
+        """
+        return self._make_request('getgodskins', [god_id])
 
     def get_items(self):
         """
@@ -196,7 +203,7 @@ class SmiteClient(object):
 
     def get_god_recommended_items(self, god_id):
         """
-        :param god_id: ID of god you are quering against. Can be found in get_gods return result.
+        :param god_id: ID of god you are querying. Can be found in get_gods return result.
         :return: Returns a dictionary of recommended items for a particular god
         """
         return self._make_request('getgodrecommendeditems', [god_id])
