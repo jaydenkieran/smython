@@ -44,7 +44,7 @@ class Endpoint(Enum):
     PC = "http://api.smitegame.com/smiteapi.svc/"
     PS4 = "http://api.ps4.smitegame.com/smiteapi.svc/"
     XBOX = "http://api.xbox.smitegame.com/smiteapi.svc/"
-    PALADINS = "http://api.paladins.com/paladinsapi.svc"
+    PALADINS = "http://api.paladins.com/paladinsapi.svc/"
 
 class SmiteClient(object):
     """
