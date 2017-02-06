@@ -1,3 +1,5 @@
+> **Warning:** Development has moved over to [HiRezPy](https://github.com/jaydenkieran/HiRezPy/tree/dev), an async library for accessing both Smite and Paladins APIs. While this library may currently work, it isn't guaranteed to in future. It probably also doesn't work with Paladins, although the endpoint is supported as an enum. **Check over at that repo** for the latest changes.
+
 # smite-python
 
 [![Documentation Status](https://readthedocs.org/projects/smite-python/badge/?version=latest)](http://smite-python.readthedocs.io/en/latest/?badge=latest)
